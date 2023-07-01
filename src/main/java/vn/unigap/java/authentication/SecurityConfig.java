@@ -29,8 +29,8 @@ public class SecurityConfig {
 						.requestMatchers(
 								new AntPathRequestMatcher("/h2-console/**"),
 								new AntPathRequestMatcher("/"),
-								new AntPathRequestMatcher("/test/test"),
-								new AntPathRequestMatcher("/competitions/**")
+								new AntPathRequestMatcher("/test/test")
+//								new AntPathRequestMatcher("/competition/**")
 						).permitAll()
 						.anyRequest().authenticated()
 				)
