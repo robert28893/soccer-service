@@ -24,7 +24,7 @@ public class CustomMatchRepository {
                         select a.id, a.home_team_id, d.name home_team_name,
                         a.away_team_id, e.name away_team_name,
                         a.home_score, a.away_score, a.match_date, a.kick_off
-                        from match a
+                        from `match` a
                         inner join competition b on a.competition_id = b.id
                         inner join season c on a.season_id = c.id
                         inner join team d on a.home_team_id = d.id
