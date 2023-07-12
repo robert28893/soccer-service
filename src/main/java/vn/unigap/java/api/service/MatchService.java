@@ -5,5 +5,7 @@ import vn.unigap.java.api.dto.out.ListDtoOut;
 import vn.unigap.java.api.dto.out.MatchDtoOut;
 
 public interface MatchService {
-    ListDtoOut<MatchDtoOut> list(ListMatchDtoIn listMatchDtoIn);
+	ListDtoOut<MatchDtoOut> list(ListMatchDtoIn listMatchDtoIn);
+
+	MatchDtoOut get(Integer id);
 }
