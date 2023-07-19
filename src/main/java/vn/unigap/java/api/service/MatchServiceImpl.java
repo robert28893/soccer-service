@@ -3,9 +3,10 @@ package vn.unigap.java.api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.unigap.java.api.dto.in.ListMatchDtoIn;
-import vn.unigap.java.api.dto.out.ListDtoOut;
+import vn.unigap.java.api.dto.in.PageDtoIn;
 import vn.unigap.java.api.dto.out.ManagerDtoOut;
 import vn.unigap.java.api.dto.out.MatchDtoOut;
+import vn.unigap.java.api.dto.out.PageDtoOut;
 import vn.unigap.java.api.repository.manager.ManagerRepository;
 import vn.unigap.java.api.repository.match.CustomMatchRepository;
 import vn.unigap.java.api.repository.player.CustomPlayerRepository;
@@ -28,9 +29,9 @@ public class MatchServiceImpl implements MatchService {
 	}
 
 	@Override
-	public ListDtoOut<MatchDtoOut> list(ListMatchDtoIn listMatchDtoIn) {
+	public PageDtoOut<MatchDtoOut> list(ListMatchDtoIn listMatchDtoIn, PageDtoIn pageDtoIn) {
 		return customMatchRepository.listMatches(listMatchDtoIn.getCompetitionId(),
-				listMatchDtoIn.getSeasonId());
+				listMatchDtoIn.getSeasonId(), pageDtoIn.getPage(), pageDtoIn.getPageSize());
 	}
 
 	@Override

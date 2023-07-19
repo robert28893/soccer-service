@@ -20,7 +20,7 @@ public class CustomMatchRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public ListDtoOut<MatchDtoOut> listMatches(Integer competitionId, Integer seasonId) {
+	public PageDtoOut<MatchDtoOut> listMatches(Integer competitionId, Integer seasonId, Integer page, Integer pageSize) {
 		List<MatchDtoOut> matches = jdbcTemplate.query(
 				"""
 						select a.id, a.home_team_id, d.name home_team_name,
@@ -34,10 +34,13 @@ public class CustomMatchRepository {
 						where b.id = :competitionId
 						and c.id = :seasonId
 						order by a.match_date desc, a.kick_off desc
+						limit :limit offset :offset
 						""",
 				new MapSqlParameterSource()
 						.addValue("competitionId", competitionId)
-						.addValue("seasonId", seasonId),
+						.addValue("seasonId", seasonId)
+						.addValue("limit", pageSize)
+						.addValue("offset", (page - 1) * pageSize),
 				(rs, rowNum) -> MatchDtoOut.builder()
 						.id(rs.getInt("id"))
 						.homeTeamId(rs.getInt("home_team_id"))
@@ -50,7 +53,24 @@ public class CustomMatchRepository {
 						.kickOff(Common.timeToString(rs.getTime("kick_off"), Constants.DTF_KICK_OFF))
 						.build());
 
-		return ListDtoOut.<MatchDtoOut>builder().data(matches).build();
+		Long totalElements = jdbcTemplate.queryForObject(
+				"""
+						select count(1)
+						from `match` a
+						inner join competition b on a.competition_id = b.id
+						inner join season c on a.season_id = c.id
+						inner join team d on a.home_team_id = d.id
+						inner join team e on a.away_team_id = e.id
+						where b.id = :competitionId
+						and c.id = :seasonId
+						""",
+				new MapSqlParameterSource()
+						.addValue("competitionId", competitionId)
+						.addValue("seasonId", seasonId),
+				Long.class
+		);
+
+		return PageDtoOut.from(page, pageSize, totalElements, matches);
 	}
 
 	public MatchDtoOut findById(Integer id) {

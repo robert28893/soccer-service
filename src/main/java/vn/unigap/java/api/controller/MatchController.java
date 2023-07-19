@@ -2,6 +2,7 @@ package vn.unigap.java.api.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.unigap.java.api.dto.in.ListMatchDtoIn;
+import vn.unigap.java.api.dto.in.PageDtoIn;
 import vn.unigap.java.api.service.MatchService;
 import vn.unigap.java.common.controller.AbstractResponseController;
 
@@ -24,9 +26,9 @@ public class MatchController extends AbstractResponseController {
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<?> list(@Valid ListMatchDtoIn listMatchDtoIn) {
+    public ResponseEntity<?> list(@Valid ListMatchDtoIn listMatchDtoIn, @Valid PageDtoIn pageDtoIn) {
         return responseEntity(() -> {
-            return matchService.list(listMatchDtoIn);
+            return matchService.list(listMatchDtoIn, pageDtoIn);
         });
     }
 
