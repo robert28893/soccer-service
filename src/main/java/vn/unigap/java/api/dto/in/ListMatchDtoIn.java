@@ -9,4 +9,5 @@ public class ListMatchDtoIn {
     private Integer competitionId;
     @NotNull
     private Integer seasonId;
+    private Integer teamId;
 }

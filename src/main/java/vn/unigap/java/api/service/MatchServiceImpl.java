@@ -31,7 +31,7 @@ public class MatchServiceImpl implements MatchService {
 	@Override
 	public PageDtoOut<MatchDtoOut> list(ListMatchDtoIn listMatchDtoIn, PageDtoIn pageDtoIn) {
 		return customMatchRepository.listMatches(listMatchDtoIn.getCompetitionId(),
-				listMatchDtoIn.getSeasonId(), pageDtoIn.getPage(), pageDtoIn.getPageSize());
+				listMatchDtoIn.getSeasonId(), pageDtoIn.getPage(), pageDtoIn.getPageSize(), listMatchDtoIn.getTeamId());
 	}
 
 	@Override

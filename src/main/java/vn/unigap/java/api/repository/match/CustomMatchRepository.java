@@ -20,7 +20,8 @@ public class CustomMatchRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public PageDtoOut<MatchDtoOut> listMatches(Integer competitionId, Integer seasonId, Integer page, Integer pageSize) {
+	public PageDtoOut<MatchDtoOut> listMatches(Integer competitionId, Integer seasonId, Integer page, Integer pageSize,
+											   Integer teamId) {
 		List<MatchDtoOut> matches = jdbcTemplate.query(
 				"""
 						select a.id, a.home_team_id, d.name home_team_name,
@@ -33,12 +34,14 @@ public class CustomMatchRepository {
 						inner join team e on a.away_team_id = e.id
 						where b.id = :competitionId
 						and c.id = :seasonId
+						and (d.id = coalesce(:teamId, d.id) or e.id = coalesce(:teamId, e.id))
 						order by a.match_date desc, a.kick_off desc
 						limit :limit offset :offset
 						""",
 				new MapSqlParameterSource()
 						.addValue("competitionId", competitionId)
 						.addValue("seasonId", seasonId)
+						.addValue("teamId", teamId)
 						.addValue("limit", pageSize)
 						.addValue("offset", (page - 1) * pageSize),
 				(rs, rowNum) -> MatchDtoOut.builder()
@@ -63,10 +66,12 @@ public class CustomMatchRepository {
 						inner join team e on a.away_team_id = e.id
 						where b.id = :competitionId
 						and c.id = :seasonId
+						and (d.id = coalesce(:teamId, d.id) or e.id = coalesce(:teamId, e.id))
 						""",
 				new MapSqlParameterSource()
 						.addValue("competitionId", competitionId)
-						.addValue("seasonId", seasonId),
+						.addValue("seasonId", seasonId)
+						.addValue("teamId", teamId),
 				Long.class
 		);
 
