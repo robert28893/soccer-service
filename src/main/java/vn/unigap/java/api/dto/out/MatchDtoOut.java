@@ -28,4 +28,5 @@ public class MatchDtoOut {
 	public List<ManagerDtoOut> awayTeamManagers;
 	public List<PlayerDtoOut> homeTeamLineups;
 	public List<PlayerDtoOut> awayTeamLineups;
+	public RefereeDtoOut referee;
 }
